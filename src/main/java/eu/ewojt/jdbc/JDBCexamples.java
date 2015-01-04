@@ -1,5 +1,7 @@
 package eu.ewojt.jdbc;
 
+import java.util.List;
+
 //JDBC example with Statement ( interface to execute a simple SQL statement with no parameters)
 //MySQL database is used
 public class JDBCexamples {
@@ -22,6 +24,12 @@ public class JDBCexamples {
 	   user.batchStatement();
 	   user.batchPreStatement();
 	   
+	   List<String> users = user.selectUserStatement();
+
+       System.out.println("Lista u¿ytkowników: ");
+       for(String c: users)
+           System.out.println(c);
+       
        user.closeConnection();
 	}
 }
