@@ -119,7 +119,7 @@ public class User {
 		return true;
 	}
 
-	// Update a record into table via JDBC Statement
+	// Update a record into table via JDBC PreparedStatement
 	public boolean updateUserPreStatement(String login, int id) {
 		String updateUser = "UPDATE USER" + " SET USERNAME = ? "
 				+ " WHERE USER_ID = ?";
@@ -139,6 +139,39 @@ public class User {
 		return true;
 	}
 
+	// Delete a record into table via JDBC Statement
+	public boolean deleteUserStatement() {
+		String deleteUser = "DELETE USER WHERE USER_ID = 1";
+		try {
+			stat.execute(deleteUser);
+			System.out.println("U¿ytkownik usuniêty");
+			System.out.println(deleteUser);
+		} catch (SQLException e) {
+			System.err.println("Blad przy usuwaniu u¿ytkownika");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	// Delete a record into table via JDBC PreparedStatement
+	public boolean deleteUserPreStatement(int id) {
+		String deleteUser = "DELETE USER WHERE USER_ID = ?";
+		try {
+			PreparedStatement preparedStatement = conn
+					.prepareStatement(deleteUser);
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+			System.out.println("U¿ytkownik usuniêty");
+			System.out.println(deleteUser);
+		} catch (SQLException e) {
+			System.err.println("Blad przy modifikowaniu u¿ytkownika");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+		
 	public void closeConnection() {
 		try {
 			conn.close();
