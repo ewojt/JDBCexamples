@@ -3,10 +3,13 @@ package eu.ewojt.jdbc;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 public class User {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -165,12 +168,45 @@ public class User {
 			System.out.println("U¿ytkownik usuniêty");
 			System.out.println(deleteUser);
 		} catch (SQLException e) {
-			System.err.println("Blad przy modifikowaniu u¿ytkownika");
+			System.err.println("Blad przy usuwaniu u¿ytkownika");
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
+	
+	//Select records from table via JDBC Statement
+    public List<String> selectUserStatement() {
+        List<String> users = new LinkedList<String>();
+        String selectUser = "SELECT USER_ID, USERNAME from USER";
+        try {
+            ResultSet result = stat.executeQuery(selectUser);
+            while(result.next()) {
+               String newstr = "ID uzytkownika: " + result.getString("USER_ID") + " Login: " + result.getString("USERNAME");   
+               users.add(new String(newstr));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return users;
+    }
+    
+	//Select records from table via JDBC Statement
+    public String selectUserPreStatement() {
+    	String newstr = null;
+        String selectUser = "SELECT USER_ID, USERNAME from USER WHERE USER_ID = ?";
+        try {
+            ResultSet result = stat.executeQuery(selectUser);
+            while(result.next()) {
+               newstr = "ID uzytkownika: " + result.getString("USER_ID") + " Login: " + result.getString("USERNAME");   
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return newstr;
+    }
 		
 	public void closeConnection() {
 		try {
